@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi Valentín ❤️</title>
+    <style>
+        :root {
+            --coffee-dark: #4B3621;
+            --coffee-medium: #6F4E37;
+            --coffee-light: #A67B5B;
+            --cream: #F5F5DC;
+        }
+
+        body {
+            background-color: var(--coffee-medium);
+            font-family: 'Georgia', serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            color: var(--cream);
+        }
+
+        /* PHASE 1: FRAGE */
+        #question-screen {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1 { font-size: 2.5rem; margin-bottom: 30px; line-height: 1.4; }
+
+        .buttons { display: flex; gap: 20px; justify-content: center; }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-family: 'Georgia', serif;
+            transition: transform 0.2s;
+        }
+
+        #yesBtn { background-color: #567d46; color: white; }
+        #noBtn { background-color: #adb5bd; color: white; position: relative; }
+
+        /* PHASE 2: ÜBERRASCHUNG */
+        #surprise-screen {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end; 
+            padding-bottom: 8vh; 
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .photo-placeholder {
+            position: absolute;
+            background-color: rgba(245, 245, 220, 0.2);
+            border: 5px solid var(--cream);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .p1 { width: 260px; height: 320px; top: 10%; left: 8%; transform: rotate(-10deg); }
+        .p2 { width: 260px; height: 320px; top: 10%; right: 10%; transform: rotate(15deg); }
+        .p3 { width: 260px; height: 320px; bottom: 10%; left: 12%; transform: rotate(5deg); }
+        .p4 { width: 260px; height: 320px; bottom: 10%; right: 6%; transform: rotate(-12deg); }
+
+        /* Der Briefumschlag & Karte */
+        .envelope-wrapper {
+            z-index: 5;
+            position: relative;
+            cursor: pointer;
+            margin-bottom: 20px; 
+        }
+
+        .envelope {
+            width: 350px;
+            height: 230px;
+            background-color: var(--coffee-light);
+            position: relative;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        /* KORREKTUR: Text auf dem Umschlag tiefer und in Braun */
+        .envelope-label {
+            position: absolute;
+            top: 75%; /* Tiefer gesetzt, damit es auf dem hellen Teil ist */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--coffee-dark); /* Braun wie die Karte */
+            font-size: 1.3rem;
+            font-style: italic;
+            font-weight: bold;
+            z-index: 5;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .envelope.open .envelope-label { opacity: 0; }
+
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 4;
+            border-top: 150px solid var(--coffee-dark);
+            border-left: 175px solid transparent;
+            border-right: 175px solid transparent;
+            transform-origin: top;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .envelope.open::before { transform: rotateX(180deg); z-index: 0; }
+
+        .letter {
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 330px;
+            height: 210px;
+            background: var(--cream);
+            color: var(--coffee-dark);
+            padding: 25px;
+            box-sizing: border-box;
+            transition: all 0.8s ease-in-out;
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            text-align: center;
+            border-radius: 2px;
+        }
+
+        .envelope.open .letter {
+            transform: translateY(-280px); /* Noch etwas höher gefahren */
+            height: 420px; 
+        }
+
+        .letter-text {
+            opacity: 0;
+            transition: opacity 0.5s 0.6s;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .envelope.open .letter-text { opacity: 1; }
+
+    </style>
+</head>
+<body>
+
+    <div id="question-screen">
+        <h1>¿Quieres ser mi Valentín? ❤️🧸🌹</h1>
+        <div class="buttons">
+            <button id="yesBtn" onclick="showSurprise()">¡SÍ!</button>
+            <button id="noBtn" onmouseover="moveButton()">No</button>
+        </div>
+    </div>
+
+    <div id="surprise-screen" style="display: none;">
+        <div class="photo-placeholder p1"></div>
+        <div class="photo-placeholder p2"></div>
+        <div class="photo-placeholder p3"></div>
+        <div class="photo-placeholder p4"></div>
+
+        <div class="envelope-wrapper" onclick="openLetter()">
+            <div class="envelope" id="envelope">
+                <div class="envelope-label">Ábreme...</div>
+                <div class="letter">
+                    <div class="letter-text">
+                        <h3 style="color: var(--coffee-medium);">Mi Amor,</h3>
+                        <p>text here...</p>
+                        <p>Te amo ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function moveButton() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function showSurprise() {
+            document.getElementById('question-screen').style.display = 'none';
+            const surprise = document.getElementById('surprise-screen');
+            surprise.style.display = 'flex';
+            setTimeout(() => {
+                surprise.style.opacity = '1';
+            }, 10);
+        }
+
+        function openLetter() {
+            document.getElementById('envelope').classList.add('open');
+        }
+    </script>
+</body>
+</html>
